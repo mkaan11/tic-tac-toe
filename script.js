@@ -39,6 +39,16 @@ class displayManager {
 
     }
     
+    static sectionReset() {
+        const gameOverField = document.getElementById('GameOver');
+        gameOverField.innerText = "";
+
+        this.#resetSections();
+
+        displayManager.FetchBoard();
+
+    }
+    
 
 
 }
@@ -138,6 +148,24 @@ class gameManager {
         gameManager.removeSquareListeners();
 
     }
+
+    static resetAll() {
+    gameManager.changeGameboard(1,"");
+    gameManager.changeGameboard(2,"");
+    gameManager.changeGameboard(3,"");
+    gameManager.changeGameboard(4,"");
+    gameManager.changeGameboard(5,"");
+    gameManager.changeGameboard(6,"");
+    gameManager.changeGameboard(7,"");
+    gameManager.changeGameboard(8,"");
+    gameManager.changeGameboard(9,"");
+    
+    displayManager.sectionReset();
+    gameManager.removeSquareListeners();
+    gameManager.addSquareListeners();
+    displayManager.turnInformer();
+
+    }
 }
 
-squares.forEach(square => square.addEventListener('click', gameManager.squareBoardChanger));
+gameManager.addSquareListeners();
