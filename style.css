@@ -42,7 +42,8 @@ body {
     height: 250px;
     /* border: 2px solid black; */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
     text-align: center;
     font-size: 22px;
 }
@@ -67,4 +68,8 @@ body {
     font-size: 64px;
 
 
+}
+
+#GameOver {
+    font-size: 40px;
 }
