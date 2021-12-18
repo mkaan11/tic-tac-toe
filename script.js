@@ -48,8 +48,17 @@ class displayManager {
         displayManager.FetchBoard();
 
     }
-    
 
+    static enableButton() {
+        document.querySelector('.button').style = "display: block";
+
+    }
+    
+    static disableButton() {
+        document.querySelector('.button').style = "display: none";
+
+
+    }
 
 }
 
@@ -134,7 +143,7 @@ class gameManager {
             return "true";
         } else if (symbol == this.#gameboard[7] && symbol == this.#gameboard[8] && symbol == this.#gameboard[9]) {
             return "true";
-        } else if (symbol == this.#gameboard[1] && symbol == this.#gameboard[4] && symbol == this.#gameboard[9]) {
+        } else if (symbol == this.#gameboard[1] && symbol == this.#gameboard[5] && symbol == this.#gameboard[9]) {
             return "true";
         } else if (symbol == this.#gameboard[3] && symbol == this.#gameboard[5] && symbol == this.#gameboard[7]) {
             return "true";
@@ -144,6 +153,7 @@ class gameManager {
 
     }
     static gameOverAction() {
+        displayManager.enableButton();
         displayManager.gameOverDisplay();
         gameManager.removeSquareListeners();
 
@@ -169,3 +179,10 @@ class gameManager {
 }
 
 gameManager.addSquareListeners();
+
+displayManager.disableButton();
+document.querySelector('.button').addEventListener('click', () => {
+    displayManager.disableButton();
+    gameManager.resetAll();
+})
+

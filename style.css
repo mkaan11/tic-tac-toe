@@ -73,3 +73,16 @@ body {
 #GameOver {
     font-size: 40px;
 }
+
+.button {
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+    margin: 10px;
+    padding: 15px 32px;
+}
+      
+.button:hover {
+    background-color: #555555;
+    color: white;
+}
