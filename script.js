@@ -1,26 +1,52 @@
+const squares = document.querySelectorAll('.square');
+
 
 class displayManager {
 
     static FetchBoard() {
-            document.querySelectorAll('[data-squareNumber]').forEach(square => {
+            squares.forEach(square => {
                 let currentNumber = square.getAttribute('data-squareNumber');
                 square.textContent = gameManager.currentGameboard[currentNumber];
             });
     } 
 
-    static turnInformer() {
-        //select all turn sections and delete them
-        document.querySelectorAll(".playerContainer>div").forEach(turnSection => turnSection.innerHTML = "");
+    static #resetSections() {
+        const turnSections = document.querySelectorAll(".playerSection");
+        turnSections.forEach(turnSection => turnSection.innerHTML = "");
 
-        const currentPlayerSection = document.querySelector(`.${player}>div`);
-        currentPlayerSection.innerHTML += "<br> It's your turn!";
+
     }
+
+
+    static turnInformer() {
+        this.#resetSections();
+
+        let currentPlayerSection = document.querySelector(`.${gameManager.currentPlayer}`);
+        currentPlayerSection.innerHTML = "It's your turn!";
+    }
+
+    static winnerTeller() {
+        this.#resetSections();
+
+        let currentPlayerSection = document.querySelector(`.${gameManager.currentPlayer}`);
+        currentPlayerSection.innerHTML += "<br> You Won!";
+
+    }
+
+    static gameOverDisplay() {
+        const gameOverField = document.getElementById('GameOver');
+        gameOverField.innerText = "Game Over!";
+
+    }
+    
+
 
 }
 
+
 class gameManager {
 
-    static #gameboard = ["",
+    static #gameboard = ["player1",
                         "","","",
                         "","","",
                         "","",""];
@@ -30,16 +56,21 @@ class gameManager {
         this.#gameboard[number] = symbol;
     }
 
-    static setCurrentPlayer(playerName) {
-        this.#gameboard[0] = playerName;
-
-    }
-
     static get currentPlayer() {
-        let currentPlayer = this.#gameboard[0];
+        const currentPlayer = this.#gameboard[0];
         return currentPlayer;
 
     }
+
+    static changeCurrentPlayer() {
+        if (this.#gameboard[0] == "player1") {
+            this.#gameboard[0] = "player2"
+        } else if(this.#gameboard[0] == "player2") {
+            this.#gameboard[0] = "player1"
+        }
+
+    }
+
 
     static get currentGameboard() {
         const board = this.#gameboard;
@@ -47,5 +78,66 @@ class gameManager {
 
     }
 
+    static get currentSymbol() {
+        if(this.currentPlayer == "player1") {
+            return "X";
+        } else if (this.currentPlayer == "player2") {
+            return "O";
+        }
 
+    }
+    static squareBoardChanger(e) {
+        let currentNumber = e.target.getAttribute('data-squareNumber');
+        gameManager.changeGameboard(currentNumber, gameManager.currentSymbol);
+        displayManager.FetchBoard();
+        let ifVictory = gameManager.checkForVictory();
+        if (ifVictory == "true")  {
+            gameManager.gameOverAction();
+        } else {
+            gameManager.changeCurrentPlayer(); 
+            displayManager.turnInformer();
+
+        }
+
+    }
+
+    static addSquareListeners() {
+        squares.forEach(square => square.addEventListener('click', gameManager.squareBoardChanger));
+
+    }
+
+    static removeSquareListeners() {
+        squares.forEach(square => square.removeEventListener('click', gameManager.squareBoardChanger));
+    }
+
+    static checkForVictory() {
+        let symbol = gameManager.currentSymbol;
+        if (symbol == this.#gameboard[1] && symbol == this.#gameboard[4] && symbol == this.#gameboard[7]) {
+            return "true";
+        } else if (symbol == this.#gameboard[2] && symbol == this.#gameboard[5] && symbol == this.#gameboard[8]) {
+            return "true"; 
+        } else if (symbol == this.#gameboard[3] && symbol == this.#gameboard[6] && symbol == this.#gameboard[9]) {
+            return "true";
+        } else if (symbol == this.#gameboard[1] && symbol == this.#gameboard[2] && symbol == this.#gameboard[3]) {
+            return "true";
+        } else if (symbol == this.#gameboard[4] && symbol == this.#gameboard[5] && symbol == this.#gameboard[6]) {
+            return "true";
+        } else if (symbol == this.#gameboard[7] && symbol == this.#gameboard[8] && symbol == this.#gameboard[9]) {
+            return "true";
+        } else if (symbol == this.#gameboard[1] && symbol == this.#gameboard[4] && symbol == this.#gameboard[9]) {
+            return "true";
+        } else if (symbol == this.#gameboard[3] && symbol == this.#gameboard[5] && symbol == this.#gameboard[7]) {
+            return "true";
+        } else {
+            return "false";
+        }
+
+    }
+    static gameOverAction() {
+        displayManager.gameOverDisplay();
+        gameManager.removeSquareListeners();
+
+    }
 }
+
+squares.forEach(square => square.addEventListener('click', gameManager.squareBoardChanger));
