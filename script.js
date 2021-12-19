@@ -71,7 +71,7 @@ class gameManager {
                         "","",""];
 
 
-    static changeGameboard(number,symbol) {
+    static #changeGameboard(number,symbol) {
         this.#gameboard[number] = symbol;
     }
 
@@ -105,10 +105,29 @@ class gameManager {
         }
 
     }
+
+    static #XOclassAdder(e) {
+        if (this.currentPlayer == "player1") {
+            e.target.classList.add("X")
+        } else if (this.currentPlayer == "player2") {
+            e.target.classList.add("O")
+
+        }
+
+        
+
+    }
+
+    static #XOEventListenerRemover(e) {
+        e.target.removeEventListener("click",gameManager.squareBoardChanger )
+
+    }
     static squareBoardChanger(e) {
+        gameManager.#XOclassAdder(e);
         let currentNumber = e.target.getAttribute('data-squareNumber');
-        gameManager.changeGameboard(currentNumber, gameManager.currentSymbol);
+        gameManager.#changeGameboard(currentNumber, gameManager.currentSymbol);
         displayManager.FetchBoard();
+        gameManager.#XOEventListenerRemover(e);
         let ifVictory = gameManager.checkForVictory();
         if (ifVictory == "true")  {
             gameManager.gameOverAction();
