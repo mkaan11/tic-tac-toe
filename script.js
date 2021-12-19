@@ -118,8 +118,12 @@ class gameManager {
 
     }
 
+    static #XOremoveAllClasses() {
+        document.querySelectorAll(".X").forEach(X => X.classList.remove("X") );
+        document.querySelectorAll(".O").forEach(O => O.classList.remove("O") );
+    }
     static #XOEventListenerRemover(e) {
-        e.target.removeEventListener("click",gameManager.squareBoardChanger )
+        e.target.removeEventListener("click",gameManager.squareBoardChanger );
 
     }
     static squareBoardChanger(e) {
@@ -127,11 +131,11 @@ class gameManager {
         let currentNumber = e.target.getAttribute('data-squareNumber');
         gameManager.#changeGameboard(currentNumber, gameManager.currentSymbol);
         displayManager.FetchBoard();
-        gameManager.#XOEventListenerRemover(e);
         let ifVictory = gameManager.checkForVictory();
         if (ifVictory == "true")  {
             gameManager.gameOverAction();
         } else {
+            gameManager.#XOEventListenerRemover(e);
             gameManager.changeCurrentPlayer(); 
             displayManager.turnInformer();
 
@@ -179,16 +183,17 @@ class gameManager {
     }
 
     static resetAll() {
-    gameManager.changeGameboard(1,"");
-    gameManager.changeGameboard(2,"");
-    gameManager.changeGameboard(3,"");
-    gameManager.changeGameboard(4,"");
-    gameManager.changeGameboard(5,"");
-    gameManager.changeGameboard(6,"");
-    gameManager.changeGameboard(7,"");
-    gameManager.changeGameboard(8,"");
-    gameManager.changeGameboard(9,"");
+    gameManager.#changeGameboard(1,"");
+    gameManager.#changeGameboard(2,"");
+    gameManager.#changeGameboard(3,"");
+    gameManager.#changeGameboard(4,"");
+    gameManager.#changeGameboard(5,"");
+    gameManager.#changeGameboard(6,"");
+    gameManager.#changeGameboard(7,"");
+    gameManager.#changeGameboard(8,"");
+    gameManager.#changeGameboard(9,"");
     
+    gameManager.#XOremoveAllClasses();
     displayManager.sectionReset();
     gameManager.removeSquareListeners();
     gameManager.addSquareListeners();
