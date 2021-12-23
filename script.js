@@ -126,22 +126,50 @@ class gameManager {
         e.target.removeEventListener("click",gameManager.squareBoardChanger );
 
     }
+    static #boardlengthmeasurer() {
+        let boardItemsString = "";
+        for (let i = 1; i<10;i++) {
+            boardItemsString = boardItemsString + gameManager.#gameboard[i];
+        }
+        return boardItemsString.length;
+    }
+
+    static #fullBoardChecker() {
+        let length = gameManager.#boardlengthmeasurer();
+        if (length == 9) {
+            return "Full";
+        } else {
+            return "Not Full";
+        }
+
+    }
+
     static squareBoardChanger(e) {
         gameManager.#XOclassAdder(e);
         let currentNumber = e.target.getAttribute('data-squareNumber');
         gameManager.#changeGameboard(currentNumber, gameManager.currentSymbol);
         displayManager.FetchBoard();
+
         let ifVictory = gameManager.checkForVictory();
-        if (ifVictory == "true")  {
+        let ifFull = gameManager.#fullBoardChecker();
+
+        if (ifVictory == "true" )  {
             gameManager.gameOverAction();
+        } else if(ifFull == "Full") {
+            gameManager.gameOverAction();
+            alert("Draw!");
+
         } else {
             gameManager.#XOEventListenerRemover(e);
             gameManager.changeCurrentPlayer(); 
             displayManager.turnInformer();
 
-        }
+        } 
+
 
     }
+
+
 
     static addSquareListeners() {
         squares.forEach(square => square.addEventListener('click', gameManager.squareBoardChanger));
